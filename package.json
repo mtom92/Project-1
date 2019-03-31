@@ -1,0 +1,27 @@
+{
+  "name": "Project-1",
+  "version": "1.0.0",
+  "description": "Game",
+  "main": "index.js",
+  "dependencies": {
+    "phaser": "^3.16.2"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.12.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "browser-sync start --server . --files ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtom92/Project-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mtom92/Project-1/issues"
+  },
+  "homepage": "https://github.com/mtom92/Project-1#readme"
+}
