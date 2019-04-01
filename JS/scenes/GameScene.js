@@ -6,9 +6,10 @@ class GameScene extends Phaser.Scene{
 
  preload() {
   this.load.image('nebula', 'http://localhost:3000/IMG/nebula.jpg');
-  this.load.image('ground', 'http://localhost:3000/IMG/platform.png');
+  this.load.image('ground', 'http://localhost:3000/IMG/block.png');
   this.load.image('star', 'http://localhost:3000/IMG/star.png');
   this.load.image('bomb', 'http://localhost:3000/IMG/bomb.png');
+  this.load.image('cloud','http://localhost:3000/IMG/flyingb.png')
   this.load.spritesheet('dude','http://localhost:3000/IMG/sprit1.gif',
       {
       frameWidth: 37,
@@ -19,6 +20,7 @@ class GameScene extends Phaser.Scene{
 
  create ()
 {
+  //sets the bounds to the camera and the world of the game
   this.cameras.main.setBounds(0, 0, 1000, 1024 * 3);
   this.physics.world.setBounds(0, 0, 1000, 1024 * 3);
   //this display the background image
@@ -26,19 +28,16 @@ class GameScene extends Phaser.Scene{
   this.add.image(0, 1024, 'nebula').setOrigin(0);
   this.add.image(0, 1024*2, 'nebula').setOrigin(0);
   //this creates the platforms and makes them statics
-  var platforms = this.physics.add.staticGroup();
+     var platforms = this.physics.add.staticGroup();
+      //the Big platform at the end of the game
+      platforms.create(200, 3055, 'ground');platforms.create(600, 3055, 'ground');platforms.create(1000, 3055, 'ground');
 
-      platforms.create(400, 3072, 'ground').setScale(3).refreshBody();
-
-      platforms.create(600, 400, 'ground');
-      platforms.create(50, 250, 'ground');
-
-      platforms.create(350, 50, 'ground');
 
   //this creates the physics of the player and sets the images for its movement
-      this.player = this.physics.add.sprite(100, 450, 'dude');
-
+      this.player = this.physics.add.sprite(100, 3020, 'dude');
+  //makes the player able to bounce when it touches a platform
       this.player.setBounce(0.2);
+  //enables colition between player and the bounds of the world
       this.player.setCollideWorldBounds(true);
 
 
@@ -51,9 +50,9 @@ class GameScene extends Phaser.Scene{
 
       this.anims.create({
         key: 'turn',
-        frames: [ { key: 'dude', frame: 15 } ],
-        frameRate: 20
-
+        frames: this.anims.generateFrameNumbers('dude', { start: 28, end: 28 }),
+        frameRate: 10,
+        repeat: -1
       });
 
       this.anims.create({
@@ -62,6 +61,8 @@ class GameScene extends Phaser.Scene{
         frameRate: 10,
         repeat: -1
       });
+
+
 
       //this allow the colition between this.player and platforms
       this.physics.add.collider(this.player, platforms);
