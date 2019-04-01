@@ -3,7 +3,6 @@ class GameScene extends Phaser.Scene{
     super({key : "GameScene"});
   }
 
-
 /*// sets the configuration of the scene
 var config = {
     type: Phaser.AUTO,
@@ -54,10 +53,10 @@ var game = new Phaser.Game(config);*/
       platforms.create(350, 90, 'ground');
 
   //this creates the physics of the player and sets the images for its movement
-      var player = this.physics.add.sprite(100, 450, 'dude');
+      this.player = this.physics.add.sprite(100, 450, 'dude');
 
-      player.setBounce(0.2);
-      player.setCollideWorldBounds(true);
+      this.player.setBounce(0.2);
+      this.player.setCollideWorldBounds(true);
 
 
       this.anims.create({
@@ -80,10 +79,10 @@ var game = new Phaser.Game(config);*/
         repeat: -1
       });
 
-      //this allow the colition between player and platforms
-      this.physics.add.collider(player, platforms);
+      //this allow the colition between this.player and platforms
+      this.physics.add.collider(this.player, platforms);
 
-      var cursors = this.input.keyboard.createCursorKeys();
+      this.cursors = this.input.keyboard.createCursorKeys();
 
       var stars = this.physics.add.group({
       key: 'star',
@@ -95,10 +94,10 @@ var game = new Phaser.Game(config);*/
 
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
         });
-    //this function allows the colition between stars and player
+    //this function allows the colition between stars and this.player
       this.physics.add.collider(stars, platforms);
-    //checking for the overlap between the player and the stars
-      this.physics.add.overlap(player, stars, collectStar, null, this);
+    //checking for the overlap between the this.player and the stars
+      this.physics.add.overlap(this.player, stars, collectStar, null, this);
 
     //these variables help to save the score and also print it
     var score = 0;
@@ -107,14 +106,14 @@ var game = new Phaser.Game(config);*/
 
     var bombs = this.physics.add.group();
     this.physics.add.collider(bombs, platforms);
-    this.physics.add.collider(player, bombs, hitBomb, null, this);
+    this.physics.add.collider(this.player, bombs, hitBomb, null, this);
 
     function hitBomb (player, bomb)
      {
        this.physics.pause();
        player.setTint(0xff0000);
        player.anims.play('turn');
-       gameOver = true;
+       this.gameOver = true;
      }
 
 
@@ -148,19 +147,19 @@ var game = new Phaser.Game(config);*/
      update ()
      {
 
-    if (cursors.left.isDown) {
-    player.setVelocityX(-160);
-    player.anims.play('left', true);
-    } else if (cursors.right.isDown) {
-     player.setVelocityX(160);
-     player.anims.play('right', true);
+    if (this.cursors.left.isDown) {
+    this.player.setVelocityX(-160);
+    this.player.anims.play('left', true);
+  } else if (this.cursors.right.isDown) {
+     this.player.setVelocityX(160);
+     this.player.anims.play('right', true);
          } else {
-           player.setVelocityX(0);
-           player.anims.play('turn');
+           this.player.setVelocityX(0);
+           this.player.anims.play('turn');
                  }
 
-              if (cursors.up.isDown && player.body.touching.down) {
-                  player.setVelocityY(-330);
+              if (this.cursors.up.isDown && this.player.body.touching.down) {
+                  this.player.setVelocityY(-330);
                     }
        }
 
