@@ -4,30 +4,11 @@ class MenuScene extends Phaser.Scene{
     super({key :"MenuScene"});
   }
 
-/*var config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        parent : "container",
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 200 }
-            }
-        },
-        scene: {
-            preload: preload,
-            create: create,
-            update : update
-        }
-    };
-
-    var game = new Phaser.Game(config);*/
-
 
   preload(){
 
     this.load.image('cover', 'http://localhost:3000/IMG/startimg.gif');
+    this.load.image('start', 'http://localhost:3000/IMG/playicon.png');
     this.load.setBaseURL('http://labs.phaser.io');
 
         this.load.image('sky', 'assets/skies/nebula.jpg');
@@ -35,6 +16,7 @@ class MenuScene extends Phaser.Scene{
         this.load.image('red', 'assets/particles/red.png');
   }
   create(){
+    this.add.image(300,200, 'start');
     this.add.image(400, 300, 'cover');
 
         var particles = this.add.particles('red');
