@@ -27,17 +27,33 @@ class GameScene extends Phaser.Scene{
   this.add.image(0, 0, 'nebula').setOrigin(0);
   this.add.image(0, 1024, 'nebula').setOrigin(0);
   this.add.image(0, 1024*2, 'nebula').setOrigin(0);
-  //this creates the clouds and gives them properties to make them movible
+  //
+  var cloudsType2 = this.physics.add.group({immovable :true,allowGravity :false, frictionX: 1,frictionY: 1,moves:false});
+
+  //this creates the horizontal moving clouds and gives them properties to make them movible
      var clouds = this.physics.add.group({collideWorldBounds: true,bounceX: 1,immovable :true,
        allowGravity :false, frictionX: 1});
   //this creates the platforms and makes them statics
      var platforms = this.physics.add.staticGroup();
-      //the Big platform at the end of the game
+      //Platforms
       platforms.create(200, 3055, 'ground');platforms.create(600, 3055, 'ground');platforms.create(1000, 3055, 'ground');
-      //the fist cloud
+      platforms.create(500, 2755, 'ground');
+      //horizontal moving clouds
       clouds.create(200, 2900, 'cloud');
       clouds.setVelocityX(60);
+      //vertical moving clouds
+      var nubes = [];
+       nubes.push(cloudsType2.create(200, 2600, 'cloud'));
 
+
+      this.tweens.add({
+          targets: nubes,
+          y:400,
+          duration: 6000,
+          ease: 'Sine.easeInOut',
+          repeat: -1,
+          yoyo:true
+      });
   //this creates the physics of the player and sets the images for its movement
       this.player = this.physics.add.sprite(100, 3020, 'dude');
   //makes the player able to bounce when it touches a platform
@@ -73,6 +89,7 @@ class GameScene extends Phaser.Scene{
       //this allow the colition between this.player and platforms
       this.physics.add.collider(this.player, platforms);
       this.physics.add.collider(this.player, clouds);
+      this.physics.add.collider(this.player, cloudsType2);
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -135,6 +152,7 @@ class GameScene extends Phaser.Scene{
    }
 
    this.cameras.main.startFollow(this.player);
+
 }
 
 
