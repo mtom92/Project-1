@@ -7,6 +7,7 @@ class GameScene extends Phaser.Scene{
  preload() {
   this.load.image('nebula', 'http://localhost:3000/IMG/nebula.jpg');
   this.load.image('ground', 'http://localhost:3000/IMG/block.png');
+  this.load.image('miniground', 'http://localhost:3000/IMG/miniblock.png');
   this.load.image('star', 'http://localhost:3000/IMG/star.png');
   this.load.image('bomb', 'http://localhost:3000/IMG/bomb.png');
   this.load.image('cloud','http://localhost:3000/IMG/flyingb.png')
@@ -28,11 +29,12 @@ class GameScene extends Phaser.Scene{
   this.add.image(0, 1024, 'nebula').setOrigin(0);
   this.add.image(0, 1024*2, 'nebula').setOrigin(0);
   //
-  var cloudsType2 = this.physics.add.group({immovable :true,allowGravity :false, frictionX: 1,frictionY: 1,moves:false});
+  var cloudsType2 = this.physics.add.group({immovable :true,bounceY:-2,allowGravity :false,
+    frictionY:3, moves : false, frictionX: 1});
 
   //this creates the horizontal moving clouds and gives them properties to make them movible
      var clouds = this.physics.add.group({collideWorldBounds: true,bounceX: 1,immovable :true,
-       allowGravity :false, frictionX: 1});
+       allowGravity :false, frictionX: 1 });
   //this creates the platforms and makes them statics
      var platforms = this.physics.add.staticGroup();
       //Platforms
@@ -43,13 +45,14 @@ class GameScene extends Phaser.Scene{
       clouds.setVelocityX(60);
       //vertical moving clouds
       var nubes = [];
-       nubes.push(cloudsType2.create(200, 2600, 'cloud'));
+       nubes.push(cloudsType2.create(180, 2740, 'cloud'));
+       nubes.push(cloudsType2.create(820, 2740, 'cloud'));
 
 
       this.tweens.add({
           targets: nubes,
-          y:400,
-          duration: 6000,
+          y:2540,
+          duration: 5000,
           ease: 'Sine.easeInOut',
           repeat: -1,
           yoyo:true
@@ -58,6 +61,7 @@ class GameScene extends Phaser.Scene{
       this.player = this.physics.add.sprite(100, 3020, 'dude');
   //makes the player able to bounce when it touches a platform
       this.player.setBounce(0.2);
+
   //enables colition between player and the bounds of the world
       this.player.setCollideWorldBounds(true);
 
