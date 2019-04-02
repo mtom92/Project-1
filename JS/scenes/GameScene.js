@@ -27,11 +27,16 @@ class GameScene extends Phaser.Scene{
   this.add.image(0, 0, 'nebula').setOrigin(0);
   this.add.image(0, 1024, 'nebula').setOrigin(0);
   this.add.image(0, 1024*2, 'nebula').setOrigin(0);
+  //this creates the clouds and gives them properties to make them movible
+     var clouds = this.physics.add.group({collideWorldBounds: true,bounceX: 1,immovable :true,
+       allowGravity :false, frictionX: 1});
   //this creates the platforms and makes them statics
      var platforms = this.physics.add.staticGroup();
       //the Big platform at the end of the game
       platforms.create(200, 3055, 'ground');platforms.create(600, 3055, 'ground');platforms.create(1000, 3055, 'ground');
-
+      //the fist cloud
+      clouds.create(200, 2900, 'cloud');
+      clouds.setVelocityX(60);
 
   //this creates the physics of the player and sets the images for its movement
       this.player = this.physics.add.sprite(100, 3020, 'dude');
@@ -41,6 +46,7 @@ class GameScene extends Phaser.Scene{
       this.player.setCollideWorldBounds(true);
 
 
+  //this creates the animation for the sprite
       this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
@@ -66,6 +72,7 @@ class GameScene extends Phaser.Scene{
 
       //this allow the colition between this.player and platforms
       this.physics.add.collider(this.player, platforms);
+      this.physics.add.collider(this.player, clouds);
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
