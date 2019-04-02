@@ -11,10 +11,10 @@ class GameScene extends Phaser.Scene{
   this.load.image('star', 'http://localhost:3000/IMG/star.png');
   this.load.image('bomb', 'http://localhost:3000/IMG/bomb.png');
   this.load.image('cloud','http://localhost:3000/IMG/flyingb.png')
-  this.load.spritesheet('dude','http://localhost:3000/IMG/sprit1.gif',
+  this.load.spritesheet('dude','http://localhost:3000/IMG/sprit1.png',
       {
-      frameWidth: 37,
-      frameHeight: 46
+      frameWidth: 47,
+      frameHeight: 55
       }
   );
 }
@@ -29,36 +29,50 @@ class GameScene extends Phaser.Scene{
   this.add.image(0, 1024, 'nebula').setOrigin(0);
   this.add.image(0, 1024*2, 'nebula').setOrigin(0);
   //
-  var cloudsType2 = this.physics.add.group({immovable :true,bounceY:-2,allowGravity :false,
+  var cloudsType2 = this.physics.add.group({immovable :true,bounceY:5,allowGravity :false,
     frictionY:3, moves : false, frictionX: 1});
 
   //this creates the horizontal moving clouds and gives them properties to make them movible
-     var clouds = this.physics.add.group({collideWorldBounds: true,bounceX: 1,immovable :true,
+     var clouds = this.physics.add.group({collideWorldBounds: true,bounceX:1,immovable :true,
        allowGravity :false, frictionX: 1 });
   //this creates the platforms and makes them statics
      var platforms = this.physics.add.staticGroup();
       //Platforms
       platforms.create(200, 3055, 'ground');platforms.create(600, 3055, 'ground');platforms.create(1000, 3055, 'ground');
       platforms.create(500, 2755, 'ground');
+      platforms.create(100, 2380, 'miniground');
+      platforms.create(870, 2380, 'miniground');
+      platforms.create(200, 2055, 'ground');
+      platforms.create(900, 2055, 'ground');
+      platforms.create(300, 1650, 'miniground');
+      platforms.create(800, 1650, 'miniground');
+      platforms.create(550, 1480, 'ground');
+      platforms.create(300, 1310, 'miniground');
+      platforms.create(800, 1310, 'miniground');
+      platforms.create(120, 1020, 'miniground');
+      platforms.create(320, 920, 'miniground');
+      platforms.create(600, 770, 'ground');
+      platforms.create(320, 620, 'miniground');
+      platforms.create(220, 500, 'miniground');
+      platforms.create(120, 360, 'miniground');
+      platforms.create(400, 250, 'ground');
+
       //horizontal moving clouds
       clouds.create(200, 2900, 'cloud');
       clouds.setVelocityX(60);
+      clouds.create(200, 2200, 'cloud');
+      clouds.setVelocityX(80);
+      clouds.create(200, 1150, 'cloud');
+      clouds.setVelocityX(100);
+      clouds.create(600, 1150, 'cloud');
+      clouds.setVelocityX(80);
       //vertical moving clouds
-      var nubes = [];
-       nubes.push(cloudsType2.create(180, 2740, 'cloud'));
-       nubes.push(cloudsType2.create(820, 2740, 'cloud'));
-
-
-      this.tweens.add({
-          targets: nubes,
-          y:2540,
-          duration: 5000,
-          ease: 'Sine.easeInOut',
-          repeat: -1,
-          yoyo:true
-      });
+      this.tweens.add({targets: cloudsType2.create(170, 2740, 'cloud'),y:2540,duration: 5000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
+      this.tweens.add({targets: cloudsType2.create(830, 2740, 'cloud'),y:2540,duration: 5000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
+      this.tweens.add({targets: cloudsType2.create(545, 1740, 'cloud'),y:2040,duration: 5000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
+      this.tweens.add({targets: cloudsType2.create(745, 365, 'cloud'),y:700,duration: 5000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
   //this creates the physics of the player and sets the images for its movement
-      this.player = this.physics.add.sprite(100, 3020, 'dude');
+      this.player = this.physics.add.sprite(100, 3010, 'dude');
   //makes the player able to bounce when it touches a platform
       this.player.setBounce(0.2);
 
@@ -83,7 +97,7 @@ class GameScene extends Phaser.Scene{
 
       this.anims.create({
         key: 'right',
-        frames: this.anims.generateFrameNumbers('dude', { start: 11, end: 18 }),
+        frames: this.anims.generateFrameNumbers('dude', { start: 19, end:25 }),
         frameRate: 10,
         repeat: -1
       });
@@ -92,8 +106,17 @@ class GameScene extends Phaser.Scene{
 
       //this allow the colition between this.player and platforms
       this.physics.add.collider(this.player, platforms);
+      this.physics.add.collider(this.player, cloudsType2, customSep, null,this);
       this.physics.add.collider(this.player, clouds);
-      this.physics.add.collider(this.player, cloudsType2);
+
+       function customSep(player, cloudsType2) {
+        //if (!this.player.locked && this.player.body.velocity.y > 0)  {
+       this.player.locked = true;
+       this.player.lockedTo = cloudsType2;
+       cloudsType2.playerLocked = true;
+       this.player.body.velocity.y = 0;
+
+      }
 
       this.cursors = this.input.keyboard.createCursorKeys();
 
