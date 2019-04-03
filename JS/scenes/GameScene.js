@@ -8,15 +8,13 @@ class GameScene extends Phaser.Scene{
   this.load.image('nebula', 'http://localhost:3000/IMG/nebula.jpg');
   this.load.image('ground', 'http://localhost:3000/IMG/block.png');
   this.load.image('miniground', 'http://localhost:3000/IMG/miniblock.png');
-  this.load.image('star', 'http://localhost:3000/IMG/star.png');
+  this.load.image('star', 'http://localhost:3000/IMG/gem.png');
   this.load.image('bomb', 'http://localhost:3000/IMG/bomb.png');
   this.load.image('cloud','http://localhost:3000/IMG/flyingb.png')
-  this.load.spritesheet('dude','http://localhost:3000/IMG/sprit1.png',
-      {
-      frameWidth: 47,
-      frameHeight: 55
-      }
-  );
+  this.load.spritesheet('dude','http://localhost:3000/IMG/sprite.png',
+      {frameWidth: 47,frameHeight: 55});
+  this.load.spritesheet('ninja','http://localhost:3000/IMG/greninja.png',
+      {frameWidth: 62, frameHeight: 62});
 }
 
  create ()
@@ -29,14 +27,18 @@ class GameScene extends Phaser.Scene{
   this.add.image(0, 1024, 'nebula').setOrigin(0);
   this.add.image(0, 1024*2, 'nebula').setOrigin(0);
   //
-  var cloudsType2 = this.physics.add.group({immovable :true,bounceY:5,allowGravity :false,
+  var cloudsType2 = this.physics.add.group({immovable :true,allowGravity :false,
     frictionY:3, moves : false, frictionX: 1});
+  //
+  this.ninjas = this.physics.add.group({immovable :true,allowGravity :false,
+    frictionY:3, moves : false, frictionX: 1, frame:'ninja'});
 
   //this creates the horizontal moving clouds and gives them properties to make them movible
      var clouds = this.physics.add.group({collideWorldBounds: true,bounceX:1,immovable :true,
        allowGravity :false, frictionX: 1 });
   //this creates the platforms and makes them statics
      var platforms = this.physics.add.staticGroup();
+
       //Platforms
       platforms.create(200, 3055, 'ground');platforms.create(600, 3055, 'ground');platforms.create(1000, 3055, 'ground');
       platforms.create(500, 2755, 'ground');
@@ -51,28 +53,46 @@ class GameScene extends Phaser.Scene{
       platforms.create(800, 1310, 'miniground');
       platforms.create(120, 1020, 'miniground');
       platforms.create(320, 920, 'miniground');
+      platforms.create(620, 1020, 'miniground');
+      platforms.create(820, 920, 'miniground');
       platforms.create(600, 770, 'ground');
       platforms.create(320, 620, 'miniground');
       platforms.create(220, 500, 'miniground');
       platforms.create(120, 360, 'miniground');
-      platforms.create(400, 250, 'ground');
+      platforms.create(400, 120, 'ground');
 
       //horizontal moving clouds
       clouds.create(200, 2900, 'cloud');
-      clouds.setVelocityX(60);
       clouds.create(200, 2200, 'cloud');
-      clouds.setVelocityX(80);
       clouds.create(200, 1150, 'cloud');
-      clouds.setVelocityX(100);
-      clouds.create(600, 1150, 'cloud');
-      clouds.setVelocityX(80);
+      clouds.setVelocityX(150);
+
       //vertical moving clouds
-      this.tweens.add({targets: cloudsType2.create(170, 2740, 'cloud'),y:2540,duration: 5000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
-      this.tweens.add({targets: cloudsType2.create(830, 2740, 'cloud'),y:2540,duration: 5000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
+      this.tweens.add({targets: cloudsType2.create(170, 2740, 'cloud'),y:2540,duration: 3000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
+      this.tweens.add({targets: cloudsType2.create(830, 2740, 'cloud'),y:2540,duration: 3000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
       this.tweens.add({targets: cloudsType2.create(545, 1740, 'cloud'),y:2040,duration: 5000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
       this.tweens.add({targets: cloudsType2.create(745, 365, 'cloud'),y:700,duration: 5000,ease: 'Sine.easeInOut',repeat: -1,yoyo:true});
   //this creates the physics of the player and sets the images for its movement
       this.player = this.physics.add.sprite(100, 3010, 'dude');
+      var parent = this;
+    //greninjas
+    this.ninjaTween = this.tweens.add({targets: [this.ninjas.create(250, 3005, 'ninja')],x:900,duration: 9000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween1res = 1;} ,onRepeat:function(){parent.ninjaTween1res = 1;},onYoyo: function(){parent.ninjaTween1res = 0;}});
+    this.ninjaTween2 = this.tweens.add({targets: [this.ninjas.create(400, 2705, 'ninja')],x:650,duration: 9000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween2res = 1;} ,onRepeat:function(){parent.ninjaTween2res = 1;},onYoyo: function(){parent.ninjaTween2res = 0;}});
+    this.ninjaTween3 = this.tweens.add({targets: [this.ninjas.create(100, 2007, 'ninja')],x:380,duration: 9000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween3res = 1;} ,onRepeat:function(){parent.ninjaTween3res = 1;},onYoyo: function(){parent.ninjaTween3res = 0;}});
+    this.ninjaTween4 = this.tweens.add({targets: [this.ninjas.create(750, 2007, 'ninja')],x:920,duration: 9000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true});
+    this.ninjaTween5 = this.tweens.add({targets: [this.ninjas.create(360, 1433, 'ninja')],x:680,duration: 9000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true});
+    this.ninjaTween6 = this.tweens.add({targets: [this.ninjas.create(400, 723, 'ninja')],x:650,duration: 9000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true});
+
+
+
+
+
   //makes the player able to bounce when it touches a platform
       this.player.setBounce(0.2);
 
@@ -80,29 +100,46 @@ class GameScene extends Phaser.Scene{
       this.player.setCollideWorldBounds(true);
 
 
-  //this creates the animation for the sprite
+  //this creates the animation for dude
       this.anims.create({
         key: 'left',
-        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+        frames: this.anims.generateFrameNumbers('dude', { start: 27, end:32  }),
         frameRate: 10,
         repeat: -1
       });
-
-      this.anims.create({
-        key: 'turn',
-        frames: this.anims.generateFrameNumbers('dude', { start: 28, end: 28 }),
-        frameRate: 10,
-        repeat: -1
-      });
-
       this.anims.create({
         key: 'right',
-        frames: this.anims.generateFrameNumbers('dude', { start: 19, end:25 }),
+        frames: this.anims.generateFrameNumbers('dude', { start: 18, end:24 }),
         frameRate: 10,
         repeat: -1
       });
+      this.anims.create({
+        key: 'waiting',
+        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 5 }),
+        frameRate: 3,
+        repeat: -1
+      });
 
+      this.anims.create({
+        key:'jump',
+        frames: this.anims.generateFrameNumbers('dude', { start: 14, end:17 }),
+        frameRate: 3,
+        repeat: -1
+      });
+  //this creates the animation for ground enem
 
+     this.anims.create({
+      key:'rightn',
+      frames: this.anims.generateFrameNumbers('ninja', { start: 8, end:11 }),
+      frameRate: 3,
+      repeat: -1
+      });
+      this.anims.create({
+       key:'leftn',
+       frames: this.anims.generateFrameNumbers('ninja', { start: 4, end:7 }),
+       frameRate: 3,
+       repeat: -1
+       });
 
       //this allow the colition between this.player and platforms
       this.physics.add.collider(this.player, platforms);
@@ -121,15 +158,13 @@ class GameScene extends Phaser.Scene{
       this.cursors = this.input.keyboard.createCursorKeys();
 
       var stars = this.physics.add.group({
+      allowGravity :false,
       key: 'star',
-      repeat: 11,
-      setXY: { x: 12, y: 50, stepX: 70 }
+      repeat: 8,
+      setXY: { x: 100, y: 2850, stepX: 100 }
         });
 
-      stars.children.iterate(function (child) {
 
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-        });
     //this function allows the colition between stars and this.player
       this.physics.add.collider(stars, platforms);
     //checking for the overlap between the this.player and the stars
@@ -159,7 +194,7 @@ class GameScene extends Phaser.Scene{
 
     score += 10;
     scoreText.setText('Score: ' + score);
-
+  /*
     if (stars.countActive(true) === 0)
        {
         stars.children.iterate(function (child) {
@@ -175,31 +210,68 @@ class GameScene extends Phaser.Scene{
         bomb.setCollideWorldBounds(true);
         bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 
-       }
+      }   */
    }
 
    this.cameras.main.startFollow(this.player);
 
+
 }
 
 
-     update ()
-     {
+     update () {
 
-    if (this.cursors.left.isDown) {
-    this.player.setVelocityX(-160);
-    this.player.anims.play('left', true);
-  } else if (this.cursors.right.isDown) {
-     this.player.setVelocityX(160);
-     this.player.anims.play('right', true);
-         } else {
-           this.player.setVelocityX(0);
-           this.player.anims.play('turn');
-                 }
-
-              if (this.cursors.up.isDown && this.player.body.touching.down) {
-                  this.player.setVelocityY(-330);
-                    }
+       if(this.ninjaTween1res == 1){
+         this.ninjaTween.targets.forEach(ninja => {
+           ninja.anims.play("rightn", true)
+         });
+       }else{
+         this.ninjaTween.targets.forEach(ninja => {
+           ninja.anims.play("leftn", true)
+         });
        }
+
+       if(this.ninjaTween2res == 1){
+         this.ninjaTween2.targets.forEach(ninja => {
+           ninja.anims.play("rightn", true)
+         });
+       }else{
+         this.ninjaTween2.targets.forEach(ninja => {
+           ninja.anims.play("leftn", true)
+         });
+       }
+
+       this.ninjaTween3.targets.forEach(ninja => {
+         ninja.anims.play("rightn", true)
+       });
+       this.ninjaTween4.targets.forEach(ninja => {
+         ninja.anims.play("rightn", true)
+       });
+       this.ninjaTween5.targets.forEach(ninja => {
+         ninja.anims.play("rightn", true)
+       });
+       this.ninjaTween6.targets.forEach(ninja => {
+         ninja.anims.play("rightn", true)
+       });
+      if (this.cursors.left.isDown) {
+        this.player.setVelocityX(-160);
+        this.player.anims.play('left', true);
+      } else if (this.cursors.right.isDown) {
+       this.player.setVelocityX(160);
+       this.player.anims.play('right', true);
+     } else {
+       this.player.setVelocityX(0);
+       this.player.anims.play('waiting',true);
+     }
+
+    if (this.cursors.up.isDown && this.player.body.touching.down) {
+      this.player.setVelocityY(-330);
+    }
+
+    if(!this.player.body.touching.down){
+      this.player.anims.play('waiting',false);
+      this.player.anims.play('jump',true);
+    }
+  }
 
 }
