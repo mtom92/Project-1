@@ -76,18 +76,18 @@ class GameScene extends Phaser.Scene{
       this.player = this.physics.add.sprite(100, 3010, 'dude');
       var parent = this;
     //greninjas
-    this.ninjaTween = this.tweens.add({targets: [this.ninjas.create(250, 3005, 'ninja')],x:900,duration: 9000,ease: 'Sine.easeInOut',
+    this.ninjaTween = this.tweens.add({targets: [this.ninjas.create(250, 3005, 'ninja')],x:900,duration: 6000,ease: 'Sine.easeInOut',
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween1res = 1;} ,onRepeat:function(){parent.ninjaTween1res = 1;},onYoyo: function(){parent.ninjaTween1res = 0;}});
-    this.ninjaTween2 = this.tweens.add({targets: [this.ninjas.create(400, 2705, 'ninja')],x:650,duration: 9000,ease: 'Sine.easeInOut',
+    this.ninjaTween2 = this.tweens.add({targets: [this.ninjas.create(400, 2705, 'ninja')],x:650,duration: 6000,ease: 'Sine.easeInOut',
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween2res = 1;} ,onRepeat:function(){parent.ninjaTween2res = 1;},onYoyo: function(){parent.ninjaTween2res = 0;}});
-    this.ninjaTween3 = this.tweens.add({targets: [this.ninjas.create(100, 2007, 'ninja')],x:380,duration: 9000,ease: 'Sine.easeInOut',
+    this.ninjaTween3 = this.tweens.add({targets: [this.ninjas.create(100, 2007, 'ninja')],x:380,duration: 6000,ease: 'Sine.easeInOut',
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween3res = 1;} ,onRepeat:function(){parent.ninjaTween3res = 1;},onYoyo: function(){parent.ninjaTween3res = 0;}});
-    this.ninjaTween4 = this.tweens.add({targets: [this.ninjas.create(750, 2007, 'ninja')],x:920,duration: 9000,ease: 'Sine.easeInOut',
-    repeat: -1,yoyo:true});
-    this.ninjaTween5 = this.tweens.add({targets: [this.ninjas.create(360, 1433, 'ninja')],x:680,duration: 9000,ease: 'Sine.easeInOut',
-    repeat: -1,yoyo:true});
-    this.ninjaTween6 = this.tweens.add({targets: [this.ninjas.create(400, 723, 'ninja')],x:650,duration: 9000,ease: 'Sine.easeInOut',
-    repeat: -1,yoyo:true});
+    this.ninjaTween4 = this.tweens.add({targets: [this.ninjas.create(750, 2007, 'ninja')],x:920,duration: 6000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween4res = 1;} ,onRepeat:function(){parent.ninjaTween4res = 1;},onYoyo: function(){parent.ninjaTween4res = 0;}});
+    this.ninjaTween5 = this.tweens.add({targets: [this.ninjas.create(360, 1433, 'ninja')],x:680,duration: 6000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween5res = 1;} ,onRepeat:function(){parent.ninjaTween5res = 1;},onYoyo: function(){parent.ninjaTween5res = 0;}});
+    this.ninjaTween6 = this.tweens.add({targets: [this.ninjas.create(400, 723, 'ninja')],x:650,duration: 6000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween6res = 1;} ,onRepeat:function(){parent.ninjaTween6res = 1;},onYoyo: function(){parent.ninjaTween6res = 0;}});
 
 
 
@@ -126,6 +126,13 @@ class GameScene extends Phaser.Scene{
         frameRate: 3,
         repeat: -1
       });
+
+      this.anims.create({
+        key:'die',
+        frames: this.anims.generateFrameNumbers('dude', { start: 5, end:7 }),
+        frameRate: 3,
+        repeat: 1
+      });
   //this creates the animation for ground enem
 
      this.anims.create({
@@ -144,8 +151,15 @@ class GameScene extends Phaser.Scene{
       //this allow the colition between this.player and platforms
       this.physics.add.collider(this.player, platforms);
       this.physics.add.collider(this.player, cloudsType2, customSep, null,this);
+      this.physics.add.collider(this.player, this.ninjas, loss, null,this);
       this.physics.add.collider(this.player, clouds);
 
+        function loss(player, ninja){
+          this.physics.pause();
+          player.setTint(0xff0000);
+          player.anims.play();
+          this.gameOver = true;
+        }
        function customSep(player, cloudsType2) {
         //if (!this.player.locked && this.player.body.velocity.y > 0)  {
        this.player.locked = true;
@@ -183,7 +197,7 @@ class GameScene extends Phaser.Scene{
      {
        this.physics.pause();
        player.setTint(0xff0000);
-       player.anims.play('turn');
+       player.anims.play('die');
        this.gameOver = true;
      }
 
@@ -241,18 +255,46 @@ class GameScene extends Phaser.Scene{
          });
        }
 
-       this.ninjaTween3.targets.forEach(ninja => {
-         ninja.anims.play("rightn", true)
-       });
-       this.ninjaTween4.targets.forEach(ninja => {
-         ninja.anims.play("rightn", true)
-       });
-       this.ninjaTween5.targets.forEach(ninja => {
-         ninja.anims.play("rightn", true)
-       });
-       this.ninjaTween6.targets.forEach(ninja => {
-         ninja.anims.play("rightn", true)
-       });
+       if(this.ninjaTween3res == 1){
+         this.ninjaTween3.targets.forEach(ninja => {
+           ninja.anims.play("rightn", true)
+         });
+       }else{
+         this.ninjaTween3.targets.forEach(ninja => {
+           ninja.anims.play("leftn", true)
+         });
+       }
+
+       if(this.ninjaTween4res == 1){
+         this.ninjaTween4.targets.forEach(ninja => {
+           ninja.anims.play("rightn", true)
+         });
+       }else{
+         this.ninjaTween4.targets.forEach(ninja => {
+           ninja.anims.play("leftn", true)
+         });
+       }
+
+       if(this.ninjaTween5res == 1){
+         this.ninjaTween5.targets.forEach(ninja => {
+           ninja.anims.play("rightn", true)
+         });
+       }else{
+         this.ninjaTween5.targets.forEach(ninja => {
+           ninja.anims.play("leftn", true)
+         });
+       }
+
+       if(this.ninjaTween6res == 1){
+         this.ninjaTween6.targets.forEach(ninja => {
+           ninja.anims.play("rightn", true)
+         });
+       }else{
+         this.ninjaTween6.targets.forEach(ninja => {
+           ninja.anims.play("leftn", true)
+         });
+       }
+
       if (this.cursors.left.isDown) {
         this.player.setVelocityX(-160);
         this.player.anims.play('left', true);
