@@ -75,6 +75,7 @@ class GameScene extends Phaser.Scene{
   //this creates the physics of the player and sets the images for its movement
       this.player = this.physics.add.sprite(100, 3010, 'dude');
       var parent = this;
+      this.gameOver = false;
     //greninjas
     this.ninjaTween = this.tweens.add({targets: [this.ninjas.create(250, 3005, 'ninja')],x:900,duration: 6000,ease: 'Sine.easeInOut',
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween1res = 1;} ,onRepeat:function(){parent.ninjaTween1res = 1;},onYoyo: function(){parent.ninjaTween1res = 0;}});
@@ -129,9 +130,9 @@ class GameScene extends Phaser.Scene{
 
       this.anims.create({
         key:'die',
-        frames: this.anims.generateFrameNumbers('dude', { start: 5, end:7 }),
+        frames: this.anims.generateFrameNumbers('dude', { start: 6, end:8 }),
         frameRate: 3,
-        repeat: 1
+        repeat: -1
       });
   //this creates the animation for ground enem
 
@@ -152,12 +153,13 @@ class GameScene extends Phaser.Scene{
       this.physics.add.collider(this.player, platforms);
       this.physics.add.collider(this.player, cloudsType2, customSep, null,this);
       this.physics.add.collider(this.player, this.ninjas, loss, null,this);
+      this.physics.add.overlap(this.player, this.ninjas, loss, null, this);
       this.physics.add.collider(this.player, clouds);
 
         function loss(player, ninja){
           this.physics.pause();
           player.setTint(0xff0000);
-          player.anims.play();
+          player.anims.play('die');
           this.gameOver = true;
         }
        function customSep(player, cloudsType2) {
@@ -170,6 +172,7 @@ class GameScene extends Phaser.Scene{
       }
 
       this.cursors = this.input.keyboard.createCursorKeys();
+      console.log(this.cursors);
 
       var stars = this.physics.add.group({
       allowGravity :false,
@@ -234,6 +237,7 @@ class GameScene extends Phaser.Scene{
 
 
      update () {
+
 
        if(this.ninjaTween1res == 1){
          this.ninjaTween.targets.forEach(ninja => {
@@ -303,7 +307,18 @@ class GameScene extends Phaser.Scene{
        this.player.anims.play('right', true);
      } else {
        this.player.setVelocityX(0);
-       this.player.anims.play('waiting',true);
+       if(this.gameOver === false){
+         this.player.anims.play('waiting',true);
+       }else{
+         this.player.anims.play('right', false);
+         this.player.anims.play('lefts', false);
+         this.player.anims.play('waiting',false);
+         this.player.anims.play('die',true);
+         this.cursors.left.enabled = false;
+         this.cursors.right.enabled = false;
+         this.cursors.up.enabled = false;
+       }
+
      }
 
     if (this.cursors.up.isDown && this.player.body.touching.down) {
@@ -311,8 +326,19 @@ class GameScene extends Phaser.Scene{
     }
 
     if(!this.player.body.touching.down){
-      this.player.anims.play('waiting',false);
-      this.player.anims.play('jump',true);
+      if(this.gameOver === false){
+        this.player.anims.play('waiting',false);
+        this.player.anims.play('jump',true);
+      }else{
+        this.player.anims.play('waiting',false);
+        this.player.anims.play('jump',false);
+        this.player.anims.play('die',true);
+        this.cursors.left.enabled = false;
+        this.cursors.right.enabled = false;
+        this.cursors.up.enabled = false;
+
+      }
+
     }
   }
 
