@@ -11,6 +11,7 @@ class GameScene extends Phaser.Scene{
   this.load.image('star', 'http://localhost:3000/IMG/gem.png');
   this.load.image('bomb', 'http://localhost:3000/IMG/bomb.png');
   this.load.image('cloud','http://localhost:3000/IMG/flyingb.png')
+  this.load.image('goldKey','http://localhost:3000/IMG/goldKey.png')
   this.load.spritesheet('dude','http://localhost:3000/IMG/sprite.png',
       {frameWidth: 47,frameHeight: 55});
   this.load.spritesheet('ninja','http://localhost:3000/IMG/greninja.png',
@@ -27,6 +28,8 @@ class GameScene extends Phaser.Scene{
   this.add.image(0, 1024, 'nebula').setOrigin(0);
   this.add.image(0, 1024*2, 'nebula').setOrigin(0);
   //
+  var keys = this.physics.add.group({allowGravity :false});
+  //
   var cloudsType2 = this.physics.add.group({immovable :true,allowGravity :false,
     frictionY:3, moves : false, frictionX: 1});
   //
@@ -38,7 +41,11 @@ class GameScene extends Phaser.Scene{
        allowGravity :false, frictionX: 1 });
   //this creates the platforms and makes them statics
      var platforms = this.physics.add.staticGroup();
+  // bombs
 
+     var bombs = this.physics.add.group({bounce:1,collideWorldBounds :true,velocity:(200,200),allowGravity :true });
+
+     keys.create(120,180,'goldKey');
       //Platforms
       platforms.create(200, 3055, 'ground');platforms.create(600, 3055, 'ground');platforms.create(1000, 3055, 'ground');
       platforms.create(500, 2755, 'ground');
@@ -95,7 +102,7 @@ class GameScene extends Phaser.Scene{
 
 
   //makes the player able to bounce when it touches a platform
-      this.player.setBounce(0.2);
+
 
   //enables colition between player and the bounds of the world
       this.player.setCollideWorldBounds(true);
@@ -155,9 +162,10 @@ class GameScene extends Phaser.Scene{
       this.physics.add.collider(this.player, this.ninjas, loss, null,this);
       this.physics.add.overlap(this.player, this.ninjas, loss, null, this);
       this.physics.add.collider(this.player, clouds);
+      this.physics.add.collider(bombs,platforms);
 
         function loss(player, ninja){
-          this.physics.pause();
+
           player.setTint(0xff0000);
           player.anims.play('die');
           this.gameOver = true;
@@ -174,35 +182,30 @@ class GameScene extends Phaser.Scene{
       this.cursors = this.input.keyboard.createCursorKeys();
       console.log(this.cursors);
 
-      var stars = this.physics.add.group({
-      allowGravity :false,
-      key: 'star',
-      repeat: 8,
-      setXY: { x: 100, y: 2850, stepX: 100 }
-        });
+      var stars = this.physics.add.group({allowGravity :false,key: 'star',repeat: 8,setXY: { x: 100, y: 2850, stepX: 100 }});
 
 
     //this function allows the colition between stars and this.player
       this.physics.add.collider(stars, platforms);
     //checking for the overlap between the this.player and the stars
       this.physics.add.overlap(this.player, stars, collectStar, null, this);
+      this.physics.add.overlap(this.player, keys, collectKey, null, this);
 
     //these variables help to save the score and also print it
     var score = 0;
     var scoreText;
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#4F0' });
 
-    var bombs = this.physics.add.group();
-    this.physics.add.collider(bombs, platforms);
+
     this.physics.add.collider(this.player, bombs, hitBomb, null, this);
 
     function hitBomb (player, bomb)
      {
-       this.physics.pause();
        player.setTint(0xff0000);
        player.anims.play('die');
        this.gameOver = true;
      }
+   setTimeout(function(){bombs.create(200, 2900, 'bomb')}, 5000);
 
 
      function collectStar (player, star)
@@ -211,24 +214,15 @@ class GameScene extends Phaser.Scene{
 
     score += 10;
     scoreText.setText('Score: ' + score);
-  /*
-    if (stars.countActive(true) === 0)
-       {
-        stars.children.iterate(function (child) {
 
-            child.enableBody(true, child.x, 0, true, true);
-
-        });
-
-        var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-        var bomb = bombs.create(x, 16, 'bomb');
-        bomb.setBounce(1);
-        bomb.setCollideWorldBounds(true);
-        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-
-      }   */
    }
+
+   function collectKey (player, star)
+ {
+  key.disableBody(true, true);
+
+
+ }
 
    this.cameras.main.startFollow(this.player);
 
