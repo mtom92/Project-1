@@ -9,7 +9,7 @@ class GameScene extends Phaser.Scene{
   this.load.image('ground', 'http://localhost:3000/IMG/block.png');
   this.load.image('miniground', 'http://localhost:3000/IMG/miniblock.png');
   this.load.image('star', 'http://localhost:3000/IMG/gem.png');
-  this.load.image('bomb', 'http://localhost:3000/IMG/bomb.png');
+  this.load.image('bomb', 'http://localhost:3000/IMG/green.png');
   this.load.image('cloud','http://localhost:3000/IMG/flyingb.png')
   this.load.image('goldKey','http://localhost:3000/IMG/goldKey.png')
   this.load.image('chest','http://localhost:3000/IMG/goldTrunk.png')
@@ -46,7 +46,7 @@ class GameScene extends Phaser.Scene{
      var platforms = this.physics.add.staticGroup();
   // bombs
 
-     var bombs = this.physics.add.group({bounce:1,collideWorldBounds :true,velocity:(200,200),allowGravity :true });
+     var bombs = this.physics.add.group({collideWorldBounds :true,velocity:(200,200),bounce:1 });
 
      keys.create(120,180,'goldKey');
      chest.create(400,100,'chest');
@@ -102,13 +102,6 @@ class GameScene extends Phaser.Scene{
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween5res = 1;} ,onRepeat:function(){parent.ninjaTween5res = 1;},onYoyo: function(){parent.ninjaTween5res = 0;}});
     this.ninjaTween6 = this.tweens.add({targets: [this.ninjas.create(400, 723, 'ninja')],x:650,duration: 6000,ease: 'Sine.easeInOut',
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween6res = 1;} ,onRepeat:function(){parent.ninjaTween6res = 1;},onYoyo: function(){parent.ninjaTween6res = 0;}});
-
-
-
-
-
-  //makes the player able to bounce when it touches a platform
-
 
   //enables colition between player and the bounds of the world
       this.player.setCollideWorldBounds(true);
@@ -180,15 +173,18 @@ class GameScene extends Phaser.Scene{
        function win(){
          if(gkey === true){
           this.gameWin = true;
+          setTimeout(function(){parent.scene.start("WinScene",{ score:score });}, 3000);
          }
 
        }
 
         function loss(player, ninja){
-
           player.setTint(0xff0000);
           player.anims.play('die');
           this.gameOver = true;
+          this.player.setVelocityX(0);
+          this.player.setVelocityY(0);
+          setTimeout(function(){parent.scene.start("LoseScene",{ score:score });}, 3000);
         }
        function customSep(player, cloudsType2) {
         //if (!this.player.locked && this.player.body.velocity.y > 0)  {
@@ -214,34 +210,37 @@ class GameScene extends Phaser.Scene{
     //these variables help to save the score and also print it
     var score = 0;
     var scoreText;
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#4F0' });
+    scoreText = this.add.text(200, 200, 'score: 0', { fontSize: '32px', fill: '#4F0' });
+
+
 
 
     this.physics.add.collider(this.player, bombs, hitBomb, null, this);
 
-    function hitBomb (player, bomb)
-     {
+    function hitBomb (player, bomb){
        player.setTint(0xff0000);
        player.anims.play('die');
        this.gameOver = true;
-     }
+       this.player.setVelocityX(0);
+       this.player.setVelocityY(0);
+      setTimeout(function(){parent.scene.start("LoseScene",{ score:score });}, 3000);
+       }
+
    setTimeout(function(){bombs.create(200, 2900, 'bomb')}, 5000);
 
 
-     function collectStar (player, star)
-   {
+     function collectStar (player, star){
     star.disableBody(true, true);
 
     score += 10;
     scoreText.setText('Score: ' + score);
 
-   }
+    }
 
-   function collectKey (player, key)
- {
+   function collectKey (player, key){
   key.disableBody(true, true);
   gkey = true;
- }
+   }
 
    this.cameras.main.startFollow(this.player);
 
@@ -348,9 +347,6 @@ class GameScene extends Phaser.Scene{
         this.player.anims.play('die',true);
         this.cursors.left.enabled = false;
         this.cursors.right.enabled = false;
-        this.cursors.up.enabled = false;
-        this.player.setVelocityX(0);
-        this.player.setVelocityY(0);
       }
 
     }
@@ -360,8 +356,8 @@ class GameScene extends Phaser.Scene{
       this.cursors.left.enabled = false;
       this.cursors.right.enabled = false;
       this.cursors.up.enabled = false;
-      this.player.setVelocityX(0);
-      this.player.setVelocityY(0);
+
+
     }
 
   }

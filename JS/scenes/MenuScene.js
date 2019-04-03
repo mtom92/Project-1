@@ -43,6 +43,7 @@ class MenuScene extends Phaser.Scene{
        var startButton = this.add.image(180,450, 'start');;
        startButton.setInteractive();
        startButton.on('pointerover', () => { this.scene.start("GameScene") });
+       this.add.text(145, 490, 'Start', { fontSize: '25px', fill: '#F70' });
 
 
   }
