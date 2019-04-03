@@ -12,6 +12,7 @@ class GameScene extends Phaser.Scene{
   this.load.image('bomb', 'http://localhost:3000/IMG/bomb.png');
   this.load.image('cloud','http://localhost:3000/IMG/flyingb.png')
   this.load.image('goldKey','http://localhost:3000/IMG/goldKey.png')
+  this.load.image('chest','http://localhost:3000/IMG/goldTrunk.png')
   this.load.spritesheet('dude','http://localhost:3000/IMG/sprite.png',
       {frameWidth: 47,frameHeight: 55});
   this.load.spritesheet('ninja','http://localhost:3000/IMG/greninja.png',
@@ -29,6 +30,8 @@ class GameScene extends Phaser.Scene{
   this.add.image(0, 1024*2, 'nebula').setOrigin(0);
   //
   var keys = this.physics.add.group({allowGravity :false});
+  var chest = this.physics.add.group({allowGravity :false});
+  var gkey = false;
   //
   var cloudsType2 = this.physics.add.group({immovable :true,allowGravity :false,
     frictionY:3, moves : false, frictionX: 1});
@@ -46,6 +49,7 @@ class GameScene extends Phaser.Scene{
      var bombs = this.physics.add.group({bounce:1,collideWorldBounds :true,velocity:(200,200),allowGravity :true });
 
      keys.create(120,180,'goldKey');
+     chest.create(400,100,'chest');
       //Platforms
       platforms.create(200, 3055, 'ground');platforms.create(600, 3055, 'ground');platforms.create(1000, 3055, 'ground');
       platforms.create(500, 2755, 'ground');
@@ -67,6 +71,7 @@ class GameScene extends Phaser.Scene{
       platforms.create(220, 500, 'miniground');
       platforms.create(120, 360, 'miniground');
       platforms.create(400, 120, 'ground');
+      platforms.create(500, 250, 'ground');
 
       //horizontal moving clouds
       clouds.create(200, 2900, 'cloud');
@@ -83,6 +88,7 @@ class GameScene extends Phaser.Scene{
       this.player = this.physics.add.sprite(100, 3010, 'dude');
       var parent = this;
       this.gameOver = false;
+      this.gameWin = false;
     //greninjas
     this.ninjaTween = this.tweens.add({targets: [this.ninjas.create(250, 3005, 'ninja')],x:900,duration: 6000,ease: 'Sine.easeInOut',
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween1res = 1;} ,onRepeat:function(){parent.ninjaTween1res = 1;},onYoyo: function(){parent.ninjaTween1res = 0;}});
@@ -141,6 +147,12 @@ class GameScene extends Phaser.Scene{
         frameRate: 3,
         repeat: -1
       });
+      this.anims.create({
+        key:'win',
+        frames: this.anims.generateFrameNumbers('dude', { start: 9, end:13 }),
+        frameRate: 10,
+        repeat: -1
+      });
   //this creates the animation for ground enem
 
      this.anims.create({
@@ -161,8 +173,16 @@ class GameScene extends Phaser.Scene{
       this.physics.add.collider(this.player, cloudsType2, customSep, null,this);
       this.physics.add.collider(this.player, this.ninjas, loss, null,this);
       this.physics.add.overlap(this.player, this.ninjas, loss, null, this);
+      this.physics.add.overlap(this.player, chest, win, null, this);
       this.physics.add.collider(this.player, clouds);
       this.physics.add.collider(bombs,platforms);
+
+       function win(){
+         if(gkey === true){
+          this.gameWin = true;
+         }
+
+       }
 
         function loss(player, ninja){
 
@@ -180,7 +200,7 @@ class GameScene extends Phaser.Scene{
       }
 
       this.cursors = this.input.keyboard.createCursorKeys();
-      console.log(this.cursors);
+
 
       var stars = this.physics.add.group({allowGravity :false,key: 'star',repeat: 8,setXY: { x: 100, y: 2850, stepX: 100 }});
 
@@ -217,11 +237,10 @@ class GameScene extends Phaser.Scene{
 
    }
 
-   function collectKey (player, star)
+   function collectKey (player, key)
  {
   key.disableBody(true, true);
-
-
+  gkey = true;
  }
 
    this.cameras.main.startFollow(this.player);
@@ -231,7 +250,6 @@ class GameScene extends Phaser.Scene{
 
 
      update () {
-
 
        if(this.ninjaTween1res == 1){
          this.ninjaTween.targets.forEach(ninja => {
@@ -311,6 +329,7 @@ class GameScene extends Phaser.Scene{
          this.cursors.left.enabled = false;
          this.cursors.right.enabled = false;
          this.cursors.up.enabled = false;
+         this.player.setVelocityX(0)
        }
 
      }
@@ -330,10 +349,21 @@ class GameScene extends Phaser.Scene{
         this.cursors.left.enabled = false;
         this.cursors.right.enabled = false;
         this.cursors.up.enabled = false;
-
+        this.player.setVelocityX(0);
+        this.player.setVelocityY(0);
       }
 
     }
+
+    if(this.gameWin == true){
+      this.player.anims.play('win',true);
+      this.cursors.left.enabled = false;
+      this.cursors.right.enabled = false;
+      this.cursors.up.enabled = false;
+      this.player.setVelocityX(0);
+      this.player.setVelocityY(0);
+    }
+
   }
 
 }
