@@ -12,13 +12,13 @@ class WinScene extends Phaser.Scene{
 
   preload(){
 
-    this.load.image('cover', './Project-1/IMG/spaceback2.jpg');
-    this.load.spritesheet('dude','./Project-1/IMG/sprite.png',
+    this.load.image('cover', 'IMG/spaceback2.jpg');
+    this.load.spritesheet('dude','IMG/sprite.png',
         {frameWidth: 47,frameHeight: 55});
-    this.load.image('start', './Project-1/IMG/playicon.png');
-    this.load.image('home', './Project-1/IMG/home.png');
-    this.load.image('trophy', './Project-1/IMG/trophy.png');
-    this.load.audio('win','./Project-1/AUDIO/win.mp3');
+    this.load.image('start', 'IMG/playicon.png');
+    this.load.image('home', 'IMG/home.png');
+    this.load.image('trophy', 'IMG/trophy.png');
+    this.load.audio('win','AUDIO/win.mp3');
 
   }
   create(){
