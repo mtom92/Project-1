@@ -7,12 +7,12 @@ class MenuScene extends Phaser.Scene{
 
   preload(){
 
-    this.load.image('cover', 'http://localhost:3000/IMG/spaceback.png');
-    this.load.image('logo', 'http://localhost:3000/IMG/name.png');
-    this.load.image('start', 'http://localhost:3000/IMG/playicon.png');
-    this.load.image('blue', 'http://localhost:3000/IMG/blue.png');
-    this.load.image('block', 'http://localhost:3000/IMG/block1.png');
-    this.load.audio('soundThem','http://localhost:3000/AUDIO/Game-Menu.mp3');
+    this.load.image('cover', '../IMG/spaceback.png');
+    this.load.image('logo', '../IMG/name.png');
+    this.load.image('start', '../IMG/playicon.png');
+    this.load.image('blue', '../IMG/blue.png');
+    this.load.image('block', '../IMG/block1.png');
+    this.load.audio('soundThem','../AUDIO/Game-Menu.mp3');
 
   }
   create(){

@@ -5,19 +5,19 @@ class GameScene extends Phaser.Scene{
 
 
  preload() {
-  
-  this.load.image('nebula', 'http://localhost:3000/IMG/nebula.jpg');
-  this.load.image('ground', 'http://localhost:3000/IMG/block.png');
-  this.load.image('miniground', 'http://localhost:3000/IMG/miniblock.png');
-  this.load.image('star', 'http://localhost:3000/IMG/gem.png');
-  this.load.image('bomb', 'http://localhost:3000/IMG/green.png');
-  this.load.image('cloud','http://localhost:3000/IMG/flyingb.png');
-  this.load.image('goldKey','http://localhost:3000/IMG/goldKey.png');
-  this.load.image('chest','http://localhost:3000/IMG/goldTrunk.png');
-  this.load.audio('soundback','http://localhost:3000/AUDIO/Game_Background.mp3');
-  this.load.spritesheet('dude','http://localhost:3000/IMG/sprite.png',
+
+  this.load.image('nebula', '../IMG/nebula.jpg');
+  this.load.image('ground', '../IMG/block.png');
+  this.load.image('miniground', '../IMG/miniblock.png');
+  this.load.image('star', '../IMG/gem.png');
+  this.load.image('bomb', '../IMG/green.png');
+  this.load.image('cloud','../IMG/flyingb.png');
+  this.load.image('goldKey','../IMG/goldKey.png');
+  this.load.image('chest','../IMG/goldTrunk.png');
+  this.load.audio('soundback','../AUDIO/Game_Background.mp3');
+  this.load.spritesheet('dude','../IMG/sprite.png',
       {frameWidth: 47,frameHeight: 55});
-  this.load.spritesheet('ninja','http://localhost:3000/IMG/greninja.png',
+  this.load.spritesheet('ninja','../IMG/greninja.png',
       {frameWidth: 62, frameHeight: 62});
 }
 
