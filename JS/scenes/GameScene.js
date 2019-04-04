@@ -5,6 +5,7 @@ class GameScene extends Phaser.Scene{
 
 
  preload() {
+  
   this.load.image('nebula', 'http://localhost:3000/IMG/nebula.jpg');
   this.load.image('ground', 'http://localhost:3000/IMG/block.png');
   this.load.image('miniground', 'http://localhost:3000/IMG/miniblock.png');
@@ -164,7 +165,7 @@ class GameScene extends Phaser.Scene{
        repeat: -1
        });
 
-       // Creates the meteorites 
+       // Creates the meteorites
           var meteor = this.physics.add.group({bounceY:(1),bounceX:(1)});
 
       //this allow the colition between this.player and platforms
@@ -175,7 +176,7 @@ class GameScene extends Phaser.Scene{
       this.physics.add.overlap(this.player, chest, win, null, this);
       this.physics.add.collider(this.player, clouds);
 
-
+      //Sets the win
        function win(){
          if(gkey === true){
           this.gameWin = true;
