@@ -1,5 +1,5 @@
 body{
-  background-image: url("../IMG/body.png") ;
+  background-image: url("./IMG/body.png");
   background-size: cover;
   background-repeat: no-repeat;
 }
