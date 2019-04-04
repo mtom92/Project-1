@@ -24,7 +24,7 @@ class GameScene extends Phaser.Scene{
 {
   var music = this.sound.add('soundback');
    music.play();
-   music.setLoop(true); 
+   music.setLoop(true);
   //sets the bounds to the camera and the world of the game
   this.cameras.main.setBounds(0, 0, 1000, 1024 * 3);
   this.physics.world.setBounds(0, 0, 1000, 1024 * 3);
@@ -48,8 +48,7 @@ class GameScene extends Phaser.Scene{
        allowGravity :false, frictionX: 1 });
   //this creates the platforms and makes them statics
      var platforms = this.physics.add.staticGroup();
-  // bombs
-     var bombs = this.physics.add.group({collideWorldBounds :true,velocity:(200,100),bounce:1});
+
 
      keys.create(120,180,'goldKey');
      chest.create(400,100,'chest');
@@ -165,6 +164,9 @@ class GameScene extends Phaser.Scene{
        repeat: -1
        });
 
+       // bombs
+          var meteor = this.physics.add.group({bounceY:(1),bounceX:(1)});
+
       //this allow the colition between this.player and platforms
       this.physics.add.collider(this.player, platforms);
       this.physics.add.collider(this.player, cloudsType2, customSep, null,this);
@@ -225,11 +227,11 @@ class GameScene extends Phaser.Scene{
       stars.create(i,1080,"star");
     }
 
-   setTimeout(function(){bombs.create(200, 2500, 'bomb')}, 3000);
+   setInterval(function(){meteor.create(Phaser.Math.Between(100, 800), Phaser.Math.Between(100, 2800), 'bomb');}, 10000);
 
-     this.physics.add.collider(bombs,platforms);
-    //this function allows the colition between stars and this.player
-      this.physics.add.collider(stars, platforms);
+
+     this.physics.add.collider(platforms,meteor);
+
     //checking for the overlap between the this.player and the stars
       this.physics.add.overlap(this.player, stars, collectStar, null, this);
       this.physics.add.overlap(this.player, keys, collectKey, null, this);
@@ -242,9 +244,9 @@ class GameScene extends Phaser.Scene{
 
 
 
-    this.physics.add.collider(this.player, bombs, hitBomb, null, this);
+    this.physics.add.collider(this.player, meteor, hitBomb, null, this);
 
-    function hitBomb (player, bomb){
+    function hitBomb (player, meteor){
        player.setTint(0xff0000);
        player.anims.play('die');
        this.gameOver = true;

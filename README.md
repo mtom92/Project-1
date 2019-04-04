@@ -5,7 +5,7 @@ This game was created with JS , HTML and CSS  using the library Phaser 3 to hand
 
 
 # General description of the Game :
-The main purpose is to go up  using the platforms and the clouds to get a key an open a chest . While you are climbing you have to avoid the enemies because if you collide with them you will lose. Also you have to collect the gems t, every gem gives you 100 points.
+The main purpose is to go up  using the platforms and the clouds to get a key an open a chest . While you are climbing you have to avoid the enemies and meteorites because if you collide with them you will lose. Also you have to collect the gems , every gem gives you 100 points. The meteorites appear every 9 seconds so you have to be fast or if you want a big score you have to avoid them.
 
 # How to play it:
 

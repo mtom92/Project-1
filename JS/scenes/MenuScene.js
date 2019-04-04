@@ -18,6 +18,7 @@ class MenuScene extends Phaser.Scene{
   create(){
     var music = this.sound.add('soundThem');
      music.play();
+     music.setLoop(true);
 
     this.add.image(400, 300, 'cover');
 
@@ -34,7 +35,6 @@ class MenuScene extends Phaser.Scene{
         block.body.setAllowGravity(0);
         block.body.setImmovable(true);
         var logo = this.physics.add.image(200, 100, 'logo');
-
         logo.setVelocity(100, 200);
         logo.setBounce(1, 1);
         logo.setCollideWorldBounds(true);
@@ -45,7 +45,10 @@ class MenuScene extends Phaser.Scene{
 
        var startButton = this.add.image(180,450, 'start');;
        startButton.setInteractive();
-       startButton.on('pointerover', () => { music.stop();this.scene.start("GameScene") });
+       startButton.on('pointerover', () => {
+         music.setLoop(false);
+         music.stop();
+         this.scene.start("GameScene"); });
        this.add.text(145, 490, 'Start', { fontSize: '25px', fill: '#F70' });
 
 

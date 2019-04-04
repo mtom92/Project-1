@@ -23,8 +23,9 @@ class WinScene extends Phaser.Scene{
   }
   create(){
 
-    var music = this.sound.add('win');
+    /*var music = this.sound.add('win');
      music.play();
+     music.setLoop(true);*/
      this.add.image(700, 400, 'cover');
      this.add.image(250, 235, 'trophy');
      this.add.text(300, 20, 'You Win!!', { fontSize: '50px', fill: '#F70' });
@@ -33,13 +34,15 @@ class WinScene extends Phaser.Scene{
        var startButton = this.add.image(180,450, 'start');;
        startButton.setInteractive();
        startButton.on('pointerover', () => {
-         music.stop();
+        /* music.setLoop(false);
+         music.stop();*/
          this.scene.start("GameScene");
         });
        var home = this.add.image(580,435, 'home');;
        home.setInteractive();
        home.on('pointerover', () => {
-         music.stop();
+        /* music.setLoop(false);
+         music.stop();*/
          this.scene.start("MenuScene");
         });
        var scoreText;
