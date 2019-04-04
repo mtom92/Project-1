@@ -12,9 +12,12 @@ class MenuScene extends Phaser.Scene{
     this.load.image('start', 'http://localhost:3000/IMG/playicon.png');
     this.load.image('blue', 'http://localhost:3000/IMG/blue.png');
     this.load.image('block', 'http://localhost:3000/IMG/block1.png');
+    this.load.audio('soundThem','http://localhost:3000/AUDIO/Game-Menu.mp3');
 
   }
   create(){
+    var music = this.sound.add('soundThem');
+     music.play();
 
     this.add.image(400, 300, 'cover');
 
@@ -42,7 +45,7 @@ class MenuScene extends Phaser.Scene{
 
        var startButton = this.add.image(180,450, 'start');;
        startButton.setInteractive();
-       startButton.on('pointerover', () => { this.scene.start("GameScene") });
+       startButton.on('pointerover', () => { music.stop();this.scene.start("GameScene") });
        this.add.text(145, 490, 'Start', { fontSize: '25px', fill: '#F70' });
 
 

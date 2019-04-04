@@ -10,9 +10,10 @@ class GameScene extends Phaser.Scene{
   this.load.image('miniground', 'http://localhost:3000/IMG/miniblock.png');
   this.load.image('star', 'http://localhost:3000/IMG/gem.png');
   this.load.image('bomb', 'http://localhost:3000/IMG/green.png');
-  this.load.image('cloud','http://localhost:3000/IMG/flyingb.png')
-  this.load.image('goldKey','http://localhost:3000/IMG/goldKey.png')
-  this.load.image('chest','http://localhost:3000/IMG/goldTrunk.png')
+  this.load.image('cloud','http://localhost:3000/IMG/flyingb.png');
+  this.load.image('goldKey','http://localhost:3000/IMG/goldKey.png');
+  this.load.image('chest','http://localhost:3000/IMG/goldTrunk.png');
+  this.load.audio('soundback','http://localhost:3000/AUDIO/Game_Background.mp3');
   this.load.spritesheet('dude','http://localhost:3000/IMG/sprite.png',
       {frameWidth: 47,frameHeight: 55});
   this.load.spritesheet('ninja','http://localhost:3000/IMG/greninja.png',
@@ -21,6 +22,8 @@ class GameScene extends Phaser.Scene{
 
  create ()
 {
+  var music = this.sound.add('soundback');
+   music.play();
   //sets the bounds to the camera and the world of the game
   this.cameras.main.setBounds(0, 0, 1000, 1024 * 3);
   this.physics.world.setBounds(0, 0, 1000, 1024 * 3);
@@ -28,7 +31,7 @@ class GameScene extends Phaser.Scene{
   this.add.image(0, 0, 'nebula').setOrigin(0);
   this.add.image(0, 1024, 'nebula').setOrigin(0);
   this.add.image(0, 1024*2, 'nebula').setOrigin(0);
-  //
+  //this sets variables for elements that are necessary to win
   var keys = this.physics.add.group({allowGravity :false});
   var chest = this.physics.add.group({allowGravity :false});
   var gkey = false;
@@ -45,8 +48,7 @@ class GameScene extends Phaser.Scene{
   //this creates the platforms and makes them statics
      var platforms = this.physics.add.staticGroup();
   // bombs
-
-     var bombs = this.physics.add.group({collideWorldBounds :true,velocity:(200,200),bounce:1 });
+     var bombs = this.physics.add.group({collideWorldBounds :true,velocity:(200,100),bounce:1});
 
      keys.create(120,180,'goldKey');
      chest.create(400,100,'chest');
@@ -102,7 +104,8 @@ class GameScene extends Phaser.Scene{
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween5res = 1;} ,onRepeat:function(){parent.ninjaTween5res = 1;},onYoyo: function(){parent.ninjaTween5res = 0;}});
     this.ninjaTween6 = this.tweens.add({targets: [this.ninjas.create(400, 723, 'ninja')],x:650,duration: 6000,ease: 'Sine.easeInOut',
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween6res = 1;} ,onRepeat:function(){parent.ninjaTween6res = 1;},onYoyo: function(){parent.ninjaTween6res = 0;}});
-
+    this.ninjaTween7 = this.tweens.add({targets: [this.ninjas.create(400, 200, 'ninja')],x:650,duration: 6000,ease: 'Sine.easeInOut',
+    repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween7res = 1;} ,onRepeat:function(){parent.ninjaTween7res = 1;},onYoyo: function(){parent.ninjaTween7res = 0;}});
   //enables colition between player and the bounds of the world
       this.player.setCollideWorldBounds(true);
 
@@ -168,12 +171,12 @@ class GameScene extends Phaser.Scene{
       this.physics.add.overlap(this.player, this.ninjas, loss, null, this);
       this.physics.add.overlap(this.player, chest, win, null, this);
       this.physics.add.collider(this.player, clouds);
-      this.physics.add.collider(bombs,platforms);
+
 
        function win(){
          if(gkey === true){
           this.gameWin = true;
-          setTimeout(function(){parent.scene.start("WinScene",{ score:score });}, 3000);
+          setTimeout(function(){music.stop();parent.scene.start("WinScene",{ score:score });}, 3000);
          }
 
        }
@@ -184,7 +187,7 @@ class GameScene extends Phaser.Scene{
           this.gameOver = true;
           this.player.setVelocityX(0);
           this.player.setVelocityY(0);
-          setTimeout(function(){parent.scene.start("LoseScene",{ score:score });}, 3000);
+          setTimeout(function(){music.stop();parent.scene.start("LoseScene",{ score:score });}, 3000);
         }
        function customSep(player, cloudsType2) {
         //if (!this.player.locked && this.player.body.velocity.y > 0)  {
@@ -199,8 +202,31 @@ class GameScene extends Phaser.Scene{
 
 
       var stars = this.physics.add.group({allowGravity :false,key: 'star',repeat: 8,setXY: { x: 100, y: 2850, stepX: 100 }});
+    for (var i = 300; i < 800; i+=100) {
+      stars.create(i,2605,"star");
+    }
+    for (var i = 100; i < 1000; i+=200) {
+      stars.create(i,2105,"star");
+    }
+    for (var i = 100; i < 1000; i+=200) {
+      stars.create(i,1905,"star");
+    }
+    for (var i = 300; i < 900; i+=100) {
+      stars.create(i,1405,"star");
+    }
+    for (var i = 400; i < 900; i+=100) {
+      stars.create(i,700,"star");
+    }
+    for (var i = 200; i < 900; i+=100) {
+      stars.create(i,160,"star");
+    }
+    for (var i = 100; i < 1000; i+=100) {
+      stars.create(i,1080,"star");
+    }
 
+   setTimeout(function(){bombs.create(200, 2500, 'bomb')}, 3000);
 
+     this.physics.add.collider(bombs,platforms);
     //this function allows the colition between stars and this.player
       this.physics.add.collider(stars, platforms);
     //checking for the overlap between the this.player and the stars
@@ -210,7 +236,7 @@ class GameScene extends Phaser.Scene{
     //these variables help to save the score and also print it
     var score = 0;
     var scoreText;
-    scoreText = this.add.text(200, 200, 'score: 0', { fontSize: '32px', fill: '#4F0' });
+    scoreText = this.add.text(0, 0, 'score: 0', { fontSize: '32px', fill: '#4F0' });
 
 
 
@@ -223,16 +249,16 @@ class GameScene extends Phaser.Scene{
        this.gameOver = true;
        this.player.setVelocityX(0);
        this.player.setVelocityY(0);
-      setTimeout(function(){parent.scene.start("LoseScene",{ score:score });}, 3000);
+      setTimeout(function(){music.stop();parent.scene.start("LoseScene",{ score:score });}, 3000);
        }
 
-   setTimeout(function(){bombs.create(200, 2900, 'bomb')}, 5000);
+
 
 
      function collectStar (player, star){
     star.disableBody(true, true);
 
-    score += 10;
+    score += 100;
     scoreText.setText('Score: ' + score);
 
     }
@@ -249,6 +275,7 @@ class GameScene extends Phaser.Scene{
 
 
      update () {
+
 
        if(this.ninjaTween1res == 1){
          this.ninjaTween.targets.forEach(ninja => {
@@ -309,11 +336,20 @@ class GameScene extends Phaser.Scene{
            ninja.anims.play("leftn", true)
          });
        }
+       if(this.ninjaTween7res == 1){
+         this.ninjaTween7.targets.forEach(ninja => {
+           ninja.anims.play("rightn", true)
+         });
+       }else{
+         this.ninjaTween7.targets.forEach(ninja => {
+           ninja.anims.play("leftn", true)
+         });
+       }
 
-      if (this.cursors.left.isDown) {
+      if (this.cursors.left.isDown && this.gameOver === false && this.gameWin == false) {
         this.player.setVelocityX(-160);
         this.player.anims.play('left', true);
-      } else if (this.cursors.right.isDown) {
+      } else if (this.cursors.right.isDown && this.gameOver === false && this.gameWin == false ) {
        this.player.setVelocityX(160);
        this.player.anims.play('right', true);
      } else {
@@ -321,19 +357,17 @@ class GameScene extends Phaser.Scene{
        if(this.gameOver === false){
          this.player.anims.play('waiting',true);
        }else{
-         this.player.anims.play('right', false);
-         this.player.anims.play('lefts', false);
-         this.player.anims.play('waiting',false);
          this.player.anims.play('die',true);
          this.cursors.left.enabled = false;
          this.cursors.right.enabled = false;
          this.cursors.up.enabled = false;
          this.player.setVelocityX(0)
+         this.player.setVelocityY(0)
        }
 
      }
 
-    if (this.cursors.up.isDown && this.player.body.touching.down) {
+    if (this.cursors.up.isDown && this.player.body.touching.down && this.gameOver === false && this.gameWin == false) {
       this.player.setVelocityY(-330);
     }
 
