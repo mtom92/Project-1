@@ -24,6 +24,7 @@ class GameScene extends Phaser.Scene{
 {
   var music = this.sound.add('soundback');
    music.play();
+   music.setLoop(true); 
   //sets the bounds to the camera and the world of the game
   this.cameras.main.setBounds(0, 0, 1000, 1024 * 3);
   this.physics.world.setBounds(0, 0, 1000, 1024 * 3);

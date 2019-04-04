@@ -1,0 +1,10 @@
+body{
+  background-image: url("../IMG/bodyimg.png") ;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#container{display: flex;
+  flex-direction: column;
+  align-items: center;
+}

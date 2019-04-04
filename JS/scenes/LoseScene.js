@@ -18,11 +18,13 @@ class LoseScene extends Phaser.Scene{
     this.load.image('start', 'http://localhost:3000/IMG/playicon.png');
     this.load.image('home', 'http://localhost:3000/IMG/home.png');
     this.load.image('try', 'http://localhost:3000/IMG/try.gif');
+    this.load.audio('lose','http://localhost:3000/AUDIO/lose.mp3');
 
   }
   create(){
 
-
+     var music = this.sound.add('lose');
+      music.play();
      this.add.image(700, 400, 'cover');
      this.add.image(250, 235, 'try');
      this.add.text(300, 20, 'You Lose!!', { fontSize: '50px', fill: '#F70' });
@@ -30,10 +32,16 @@ class LoseScene extends Phaser.Scene{
      this.add.text(555, 490, 'Home', { fontSize: '20px', fill: '#F70' });
        var startButton = this.add.image(180,450, 'start');;
        startButton.setInteractive();
-       startButton.on('pointerover', () => { this.scene.start("GameScene") });
-       var home = this.add.image(580,435, 'home');;
+       startButton.on('pointerover', () => {
+         music.stop();
+         this.scene.start("GameScene");
+       });
+       var home = this.add.image(580,435, 'home');
        home.setInteractive();
-       home.on('pointerover', () => { this.scene.start("MenuScene") });
+       home.on('pointerover', () => {
+      music.stop();
+      this.scene.start("MenuScene");
+    });
        var scoreText;
        scoreText = this.add.text(500, 200, 'Score: 0', { fontSize: '40px', fill: '#F7A' });
        scoreText.setText('Score: ' + this.score);
