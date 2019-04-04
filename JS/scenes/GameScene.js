@@ -6,8 +6,8 @@ class GameScene extends Phaser.Scene{
 
  preload() {
 
-  this.load.image('nebula', '/Project-1/IMG/nebula.jpg');
-  this.load.image('ground', '/Project-1/IMG/block.png');
+  this.load.image('nebula', '../Project-1/IMG/nebula.jpg');
+  this.load.image('ground', './Project-1/IMG/block.png');
   this.load.image('miniground', '/Project-1/IMG/miniblock.png');
   this.load.image('star', '/Project-1/IMG/gem.png');
   this.load.image('bomb', '/Project-1/IMG/green.png');
