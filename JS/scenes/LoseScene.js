@@ -12,13 +12,13 @@ class LoseScene extends Phaser.Scene{
 
   preload(){
    //preñoading all the assets
-    this.load.image('cover', '../IMG/spaceback2.jpg');
-    this.load.spritesheet('dude','../IMG/sprite.png',
+    this.load.image('cover', './Project-1/IMG/spaceback2.jpg');
+    this.load.spritesheet('dude','./Project-1/IMG/sprite.png',
         {frameWidth: 47,frameHeight: 55});
-    this.load.image('start', '../IMG/playicon.png');
-    this.load.image('home', '../IMG/home.png');
-    this.load.image('try', '../IMG/try.gif');
-    this.load.audio('lose','../AUDIO/lose.mp3');
+    this.load.image('start', './Project-1/IMG/playicon.png');
+    this.load.image('home', './Project-1/IMG/home.png');
+    this.load.image('try', './Project-1/IMG/try.gif');
+    this.load.audio('lose','./Project-1/AUDIO/lose.mp3');
 
   }
   create(){
