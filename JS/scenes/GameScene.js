@@ -91,7 +91,7 @@ class GameScene extends Phaser.Scene{
       var parent = this;
       this.gameOver = false;
       this.gameWin = false;
-    //greninjas
+    //Creates the movement for the greninjas
     this.ninjaTween = this.tweens.add({targets: [this.ninjas.create(250, 3005, 'ninja')],x:900,duration: 6000,ease: 'Sine.easeInOut',
     repeat: -1,yoyo:true,onStart:function(){parent.ninjaTween1res = 1;} ,onRepeat:function(){parent.ninjaTween1res = 1;},onYoyo: function(){parent.ninjaTween1res = 0;}});
     this.ninjaTween2 = this.tweens.add({targets: [this.ninjas.create(400, 2705, 'ninja')],x:650,duration: 6000,ease: 'Sine.easeInOut',
@@ -164,7 +164,7 @@ class GameScene extends Phaser.Scene{
        repeat: -1
        });
 
-       // bombs
+       // Creates the meteorites 
           var meteor = this.physics.add.group({bounceY:(1),bounceX:(1)});
 
       //this allow the colition between this.player and platforms

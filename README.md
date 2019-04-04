@@ -7,6 +7,23 @@ This game was created with JS , HTML and CSS  using the library Phaser 3 to hand
 # General description of the Game :
 The main purpose is to go up  using the platforms and the clouds to get a key an open a chest . While you are climbing you have to avoid the enemies and meteorites because if you collide with them you will lose. Also you have to collect the gems , every gem gives you 100 points. The meteorites appear every 9 seconds so you have to be fast or if you want a big score you have to avoid them.
 
+#Phaser 3
+In this section Im gonna try to describe how I use some phaser methods to make this game
+
+|             Method             |               Purpose          |              Used for            |
+| ------------------------------:|:------------------------------:|:--------------------------------:|
+| load.image()                   | Loads an Image                 | Preload images to the scene      |
+| cameras.main.setBounds()       | Set the bounds for the camera  | Camera limits                    |
+| physics.add.group()            | Adds physics to a group        | Create groups with same physics  |
+| tweens.add()                   | Creates a movement             | Move the Clouds                  |
+| anims.create()                 | Creates a sequence for images  | Animate Player an enemies        |
+| physics.add.collider()         | Creates a collision            | Collision between elements       |
+| add.text()                     | Add text to the scene          | Adding text                      |
+| Math.Between()                 | Generates a random value       | Generates position for meteorites|
+| disableBody()                  | Erase the body of an object    | Player collect the gems          |
+| scene.start()                  | Start a new scene              | Change scenes                    |
+
+
 # How to play it:
 
 Put your pointer in the Start icon
