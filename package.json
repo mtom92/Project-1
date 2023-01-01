@@ -4,7 +4,7 @@
   "description": "Game",
   "main": "index.js",
   "dependencies": {
-    "phaser": "^3.16.2"
+    "phaser": "^3.55.2"
   },
   "devDependencies": {
     "browser-sync": "^2.12.5"
